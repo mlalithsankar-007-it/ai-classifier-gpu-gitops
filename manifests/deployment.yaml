@@ -29,6 +29,10 @@ spec:
             - containerPort: 8080
               protocol: TCP
 
+          envFrom:
+            - configMapRef:
+                name: minio-config
+
           env:
             - name: MINIO_ACCESS_KEY
               valueFrom:
