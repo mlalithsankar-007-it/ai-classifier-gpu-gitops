@@ -3,27 +3,52 @@ kind: Deployment
 metadata:
   name: ai-classifier-gpu
   namespace: aszen-ai-dev
+
 spec:
   replicas: 1
+
   selector:
     matchLabels:
       app: ai-classifier-gpu
+
   template:
     metadata:
       labels:
         app: ai-classifier-gpu
+
     spec:
+      imagePullSecrets:
+        - name: nexus-registry
+
       containers:
         - name: ai-classifier-gpu
-          image: 192.168.1.52:8082/ai-classifier-gpu:latest
+
+          image: 192.168.1.52:8084/ai-classifier-gpu:latest
+
           ports:
-            - containerPort: 5000
+            - containerPort: 8080
+              protocol: TCP
+
+          env:
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-creds
+                  key: MINIO_ACCESS_KEY
+
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-creds
+                  key: MINIO_SECRET_KEY
+
           resources:
             requests:
-              cpu: "500m"
-              memory: "1Gi"
+              cpu: "250m"
+              memory: "512Mi"
               nvidia.com/gpu: "1"
+
             limits:
-              cpu: "2"
-              memory: "4Gi"
+              cpu: "1"
+              memory: "1Gi"
               nvidia.com/gpu: "1"
