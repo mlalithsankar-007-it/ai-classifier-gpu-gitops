@@ -1,0 +1,11 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: ai-classifier-gpu
+  namespace: aszen-ai-dev
+spec:
+  to:
+    kind: Service
+    name: ai-classifier-gpu
+  port:
+    targetPort: 8080
