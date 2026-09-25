@@ -23,7 +23,7 @@ spec:
       containers:
         - name: ai-classifier-gpu
 
-          image: nexus-registry.apps.proxmox-ocp-ha.ocpai.com/ai-classifier-gpu:latest
+          image: nexus-registry.proxmox-ocp-ha.ocpai.com/ai-classifier-gpu:latest
 
           ports:
             - containerPort: 8080
