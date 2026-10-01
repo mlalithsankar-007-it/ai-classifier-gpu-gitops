@@ -24,16 +24,19 @@ spec:
         - name: ai-classifier-gpu
 
           image: nexus-registry.proxmox-ocp-ha.ocpai.com/ai-classifier-gpu:latest
+          imagePullPolicy: Always
 
           ports:
             - containerPort: 8080
               protocol: TCP
 
-          envFrom:
-            - configMapRef:
-                name: minio-config
-
           env:
+            - name: MINIO_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: minio-config
+                  key: MINIO_ENDPOINT
+
             - name: MINIO_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
@@ -45,6 +48,21 @@ spec:
                 secretKeyRef:
                   name: minio-creds
                   key: MINIO_SECRET_KEY
+
+            - name: MODEL_BUCKET
+              value: "models"
+
+            - name: MODEL_OBJECT
+              value: "classifier/v1/interior_exterior_classifier.h5"
+
+            - name: SESSION_BUCKET
+              value: "images"
+
+            - name: SESSION_PREFIX
+              value: "sessions"
+
+            - name: USE_GPU
+              value: "true"
 
           resources:
             requests:
